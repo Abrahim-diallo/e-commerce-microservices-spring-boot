@@ -1,0 +1,115 @@
+version: '3'
+services:
+  ### Inventory Database (Postgres)
+  db-inventory:
+    container_name: db-inventory
+    image: postgres:15.2
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ms_inventory_database
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 5431:5431
+    expose:
+      - 5431
+    command: -p 5431
+
+  ### Orders Database (Postgresql)
+  db-orders:
+    container_name: db-orders
+    image: postgres:15.2
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ms_orders_database
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST_AUTH_METHOD: trust
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    ports:
+      - "5432:5432"
+    expose:
+      - 5432:5432
+    command:
+      - -p 5432
+      - -c max_connections=100
+      - -c shared_buffers=128MB
+      - -c work_mem=128MB
+      - -c maintenance_work_mem=64MB
+  ### Products Database (Postgres)
+  db-products:
+    container_name: db-products
+    image: postgres:15.2
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ms_products
+      POSTGRES_USER: uncledave
+      POSTGRES_PASSWORD: Test123Test123
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
+    command: -p 5432
+    depends_on:
+      - db-inventory
+      - db-products
+
+  ### Zookeeper
+  zookeeper:
+    container_name: zookeeper
+    image: confluentinc/cp-zookeeper:7.4.0
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  ### Kafka
+  kafka:
+    container_name: kafka
+    image: confluentinc/cp-kafka:7.4.0
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+
+  ### Zipkin
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin:2.24.2
+    ports:
+      - "9411:9411"
+
+  ### Prometheus
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:v2.46.0
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./files/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  ### Grafana
+  grafana:
+    container_name: grafana
+    image: grafana/grafana-oss:10.0.3
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    links:
+      - prometheus
+    volumes:
+      - ./files/grafana:/var/lib/grafana
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_SECURITY_ADMIN_USER: admin
+    depends_on:
+      - prometheus
