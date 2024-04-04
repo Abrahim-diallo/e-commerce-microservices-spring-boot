@@ -1,35 +1,62 @@
+server:
+  servlet:
+    context-path: /
+
 spring:
   application:
-    name: api-gateway
+    name: API-GATEWAY
+  zipkin:
+    base-url: ${SPRING_ZIPKIN_BASE_URL:http://localhost:9411/}
+  config:
+    import: "optional:configserver:http://localhost:9296"
+  profiles:
+    active: dev
   cloud:
     gateway:
-      routes:
+      default-filters:
+        - name: DedupeResponseHeader
+          args:
+            names: Access-Control-Allow-Credentials, Access-Control-Allow-Origin
+            strategy: RETAIN_UNIQUE
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origins: ${CLIENT_HOST:http://localhost:4200}
+            allowed-headers: "*"
+            exposed-headers: "*"
+            allow-credentials: true
+            allowed-methods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - PATCH
+              - OPTIONS
+      discovery:
+        locator:
+          enabled: true
+      httpclient:
+        connect-timeout: 60000
+        response-timeout: 60s
 
-server:
-  port: 8080
-
-eureka:
-  client:
-    service-url:
-      default-zone: http://eureka:password@localhost:8761/eureka
-  instance:
-    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-
-logging:
-  level:
-    root: info
-    org:
-      springframework:
-        cloud:
-          gateway:
-            route:
-              RouteDefinitionRouteLocator: info
-  pattern:
-    level: '%5p [${spring.application.name}, %X{traceId:-}, %X{spanId:-}]'
+resilience4j:
+  circuitbreaker:
+    instances:
+      apiGateway:
+        register-health-indicator: true
+        event-consumer-buffer-size: 10
+        automatic-transition-from-open-to-half-open-enabled: true
+        failure-rate-threshold: 50
+        minimum-number-of-calls: 5
+        permitted-number-of-calls-in-half-open-state: 3
+        sliding-window-size: 10
+        wait-duration-in-open-state: 5s
+        sliding-window-type: COUNT_BASED
 
 management:
-  endpoints:
-    web:
-      exposure:
-        include: health,prometheus
-      base-path: /actuator
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoint:
+    health:
+      show-details: always

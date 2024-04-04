@@ -1,0 +1,29 @@
+server:
+  port: 8080
+  error:
+    whitelabel:
+      enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+#logging:
+#  config: classpath:log4j2.xml
+#  level:
+#    org:
+#      hibernate:
+#        SQL: DEBUG
+#      springframework:
+#        web: DEBUG
+#        data: DEBUG
+#      boot:
+#        autoconfigure:
+#          data:
+#            rest: DEBUG
+#            jpa: DEBUG
+#            orm: DEBUG
+jwt:
+  secret: 586B633834416E396D7436753879382F423F4428482B4C6250655367566B5970

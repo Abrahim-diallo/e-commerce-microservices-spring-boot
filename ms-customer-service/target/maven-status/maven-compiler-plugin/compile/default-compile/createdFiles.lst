@@ -1,0 +1,17 @@
+fr/pmuchallenger/ms_customer/model/entities/Customer$CustomerBuilder.class
+fr/pmuchallenger/ms_customer/constants/AppCustomerConstants.class
+fr/pmuchallenger/ms_customer/model/dto/request/AddCustomerRequest.class
+fr/pmuchallenger/ms_customer/model/dto/response/CustomerDto.class
+fr/pmuchallenger/ms_customer/exceptions/CustomerValidationException.class
+fr/pmuchallenger/ms_customer/MsCustomerServiceApplication.class
+fr/pmuchallenger/ms_customer/services/Impl/CustomerServiceImpl.class
+fr/pmuchallenger/ms_customer/exceptions/GlobalExceptionHandler.class
+fr/pmuchallenger/ms_customer/mappers/CustomerMapper.class
+fr/pmuchallenger/ms_customer/exceptions/CustomerNotFoundException.class
+fr/pmuchallenger/ms_customer/configs/SwaggerConfig.class
+fr/pmuchallenger/ms_customer/controller/CustomerController.class
+fr/pmuchallenger/ms_customer/services/CustomerService.class
+fr/pmuchallenger/ms_customer/model/dto/response/CustomerDto$CustomerDtoBuilder.class
+fr/pmuchallenger/ms_customer/model/entities/Customer.class
+fr/pmuchallenger/ms_customer/repository/CustomerRepository.class
+fr/pmuchallenger/ms_customer/exceptions/ErrorResponse.class

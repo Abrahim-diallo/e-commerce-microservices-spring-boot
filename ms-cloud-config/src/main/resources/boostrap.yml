@@ -1,0 +1,19 @@
+#spring:
+#  config:
+#    import: ${SPRING_CONFIG_IMPORT:optional:configserver:http://localhost:9296}
+spring:
+  application:
+    name: CLOUD-CONFIG
+  cloud:
+    config:
+      uri: http://localhost:9296
+  profiles:
+    active: dev
+    config:
+      discovery:
+        enabled: true
+        service-id: cloud-config-server
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/

@@ -1,0 +1,24 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'ms-produit-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['ms-produit-service:8080']
+
+  - job_name: 'ms-commande-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['ms-commande-service:8080']
+
+  - job_name: 'ms-paiement-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['ms-paiement-service:8080']
+
+  - job_name: 'ms-customer-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['ms-customer-service:8080']
