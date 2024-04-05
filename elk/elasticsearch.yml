@@ -1,0 +1,52 @@
+################################################# EN LOCAL #################################
+# Configuration réseau
+network.host: 0.0.0.0
+# Permet à Elasticsearch d'accepter des connexions sur toutes les interfaces réseau. 
+# Pour des raisons de sécurité, on doit s'assurer que notre pare-feu est correctement configuré pour limiter l'accès uniquement aux clients fiables.
+
+transport.host: localhost
+# Limite les communications de transport (utilisées pour la communication entre les nœuds du cluster) à la machine locale. 
+# Pour un déploiement en cluster, cela devrait être ajusté pour permettre la communication entre les nœuds.
+
+
+################################################# EN PRODUCTION #################################
+# Configuration de sécurité (à décommenter et configurer pour la mise en production)
+# xpack.security.enabled: true
+# Active la sécurité X-Pack pour Elasticsearch, incluant l'authentification, l'autorisation, et le chiffrement TLS.
+
+# xpack.security.transport.ssl.enabled: true
+# xpack.security.transport.ssl.verification_mode: certificate
+# xpack.security.transport.ssl.keystore.path: certs/elastic-certificates.p12
+# xpack.security.transport.ssl.truststore.path: certs/elastic-certificates.p12
+# Configure le chiffrement TLS pour les communications entre les nœuds du cluster. 
+# Nécessite de générer et de placer les certificats dans le dossier spécifié.
+
+# xpack.security.http.ssl.enabled: true
+# xpack.security.http.ssl.keystore.path: "http.p12"
+# Active et configure le chiffrement TLS pour les communications HTTP avec le cluster Elasticsearch. 
+# S'assurer que le certificat est généré et accessible au chemin spécifié.
+
+# Cluster settings
+# cluster.name: my-production-cluster
+# Nom du cluster, important pour différencier les environnements de production des autres environnements.
+
+# node.name: node-1
+# Nom unique pour le nœud au sein du cluster, facilitant l'identification et la gestion des nœuds.
+
+# discovery.seed_hosts: ["host1", "host2"]
+# Liste des hôtes initiaux utilisés pour la découverte des autres nœuds du cluster.
+
+# cluster.initial_master_nodes: ["node-1", "node-2"]
+# Liste des noms de nœuds qui sont éligibles à être des nœuds maîtres lors de la première formation du cluster.
+
+# Gestion des ressources
+# indices.memory.index_buffer_size: 10%
+# Ajuste la part de la mémoire allouée aux indices pour améliorer les performances d'indexation.
+
+# Monitoring et logging
+# xpack.monitoring.collection.enabled: true
+# Active la collecte de données de monitoring pour analyser et surveiller l'état de santé du cluster.
+
+# path.logs: /var/log/elasticsearch
+# path.data: /var/data/elasticsearch
+# Définit les chemins pour les fichiers journaux et les données, permettant une gestion facilitée des fichiers.

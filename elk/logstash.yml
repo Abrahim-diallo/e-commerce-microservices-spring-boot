@@ -1,0 +1,45 @@
+# Configuration réseau
+http.host: "0.0.0.0"
+# Configure Logstash pour écouter sur toutes les interfaces réseau. 
+# Cela permet à Logstash de recevoir des données de n'importe quelle source réseau.
+# Important: S'assurer que votre environnement réseau est sécurisé pour éviter les accès non autorisés.
+
+# Chemin de configuration
+path.config: /usr/share/logstash/pipeline
+# Spécifie le répertoire contenant les fichiers de configuration de pipeline de Logstash.
+# Cela permet une organisation claire et centralisée de vos pipelines Logstash.
+
+# Monitoring X-Pack
+xpack.monitoring.elasticsearch.hosts: [ "elasticsearch:9200" ]
+# Définit les hôtes Elasticsearch à utiliser pour le stockage des données de monitoring de Logstash.
+# Permet une surveillance et une analyse en temps réel de la performance et de la santé de Logstash.
+
+# Sécurité et Authentification (Commentaires pour configurations supplémentaires)
+# xpack.monitoring.elasticsearch.username: "logstash_system"
+# xpack.monitoring.elasticsearch.password: "password"
+# Active et configure pour utiliser l'authentification lors de l'envoi des données de monitoring à Elasticsearch.
+# S'assurer que les identifiants sont sécurisés et gérés de manière appropriée, par exemple via des variables d'environnement ou un gestionnaire de secrets.
+
+# Gestion des logs
+path.logs: /var/log/logstash
+# Définit le répertoire où Logstash écrit ses fichiers journaux.
+# Organise et centralise les logs pour faciliter le monitoring et le dépannage.
+
+# Gestion des données
+path.data: /var/lib/logstash
+# Spécifie le répertoire où Logstash stocke ses données opérationnelles.
+# Important pour la persistence des données et la reprise après un arrêt inattendu.
+
+# Performance et Ressources
+pipeline.workers: 4
+# Définit le nombre de workers pour exécuter les pipelines de filtrage et de sortie.
+# Ajuster ce nombre en fonction des ressources CPU disponibles pour optimiser le traitement.
+
+pipeline.batch.size: 125
+# Configure la taille des lots pour le traitement des événements, impactant directement la mémoire utilisée et le débit.
+# Ajuster en fonction de la charge de travail et des ressources système pour équilibrer performance et consommation de mémoire.
+
+# Améliorations de Sécurité
+xpack.security.enabled: true
+# Activer cette option pour utiliser les fonctionnalités de sécurité X-Pack, incluant le chiffrement et l'authentification.
+# Nécessite une configuration supplémentaire pour spécifier les détails de l'authentification et du chiffrement.
