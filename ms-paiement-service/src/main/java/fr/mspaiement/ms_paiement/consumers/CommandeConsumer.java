@@ -19,8 +19,8 @@ public class CommandeConsumer {
     private final PaiementRepository paiementRepository;
     private final KafkaTemplate<String, PaiementEvent> kafkaTemplate;
 
-    // Méthode de consommation d'événement Kafka
-    @KafkaListener(topics = "order-events")
+    // Méthode de consommation d'événement
+    @KafkaListener(topics = "commande-events")
     public void consume(CommandePlacedEvent commandePlacedEvent) {
         // Log de l'événement consommé
         log.info("CommandePlacedEvent consommé: {}", commandePlacedEvent);
@@ -39,7 +39,7 @@ public class CommandeConsumer {
         var payment = paiementRepository.save(paiementEntity);
         // Log de l'entité Paiement sauvegardée
         log.debug("Entité Paiement sauvegardée dans la base de données: {}", payment);
-        // Envoi de l'événement de paiement à Kafka
+        // Envoi de l'événement de paiement
         sendPaymentEvent(PaiementEvent.builder()
                 .paiementId(payment.getId())
                 .commandeId(payment.getCommandeId())
@@ -48,12 +48,12 @@ public class CommandeConsumer {
                 .build());
     }
 
-    // Méthode pour envoyer un événement de paiement à Kafka
+    // Méthode pour envoyer un événement de paiement
     public void sendPaymentEvent(PaiementEvent paiementEvent) {
-        // Log de l'envoi de l'événement de paiement à Kafka
+        // Log de l'envoi de l'événement de paiement
         log.debug("Envoi de l'événement de paiement à Kafka");
         kafkaTemplate.send("paiement-events", paiementEvent);
-        // Log de l'événement de paiement envoyé avec succès à Kafka
+        // Log de l'événement de paiement envoyé avec succès
         log.debug("Événement de paiement envoyé à Kafka avec succès");
     }
 }
